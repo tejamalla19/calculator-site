@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Calculate</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #ffffff;
+            background-image: url(https://cdn.pixabay.com/photo/2024/04/12/18/18/ai-generated-8692405_1280.jpg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: xxx-large;
+            color: #fff;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        input {
+            width: 70px;
+            height: 50px;
+            font-size: x-large;
+            border-radius: 8px;
+            background-color: #000;
+            color: #b2ff66;
+            margin: 2px;
+            border: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #4d4d4d;
+        }
+
+        input[name="Display"] {
+            width: 290px;
+            height: 50px;
+            background-color: #eaeaea;
+            color: #000;
+            border-radius: 8px;
+            font-size: large;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            cursor: default;
+        }
+
+        .calculator-container {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(7px);
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            width: 310px;
+            margin: 100px auto;
+        }
+
+        .clear-btn {
+            width: 290px;
+            background-color: rgb(251, 70, 70);
+            color: #fff;
+        }
+
+        .clear-btn:hover {
+            background-color: rgb(200, 30, 30);
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1><i>Just Calculate</i></h1>
+        <form name="clk" onsubmit="event.preventDefault();">
+            <input type="text" name="Display" readonly><br>
+            <input class="btn" type="button" value="7" data-value="7">
+            <input class="btn" type="button" value="8" data-value="8">
+            <input class="btn" type="button" value="9" data-value="9">
+            <input class="btn" type="button" value="/" data-value="/"><br>
+            <input class="btn" type="button" value="4" data-value="4">
+            <input class="btn" type="button" value="5" data-value="5">
+            <input class="btn" type="button" value="6" data-value="6">
+            <input class="btn" type="button" value="*" data-value="*"><br>
+            <input class="btn" type="button" value="1" data-value="1">
+            <input class="btn" type="button" value="2" data-value="2">
+            <input class="btn" type="button" value="3" data-value="3">
+            <input class="btn" type="button" value="-" data-value="-"><br>
+            <input class="btn" type="button" value="0" data-value="0">
+            <input class="btn" type="button" value="." data-value=".">
+            <input class="btn" type="button" value="=" id="equals">
+            <input class="btn" type="button" value="+" data-value="+"><br>
+            <input class="btn clear-btn" type="button" value="Clear" id="clear">
+        </form>
+    </div>
+
+    <script>
+        const display = document.querySelector('input[name="Display"]');
+        const buttons = document.querySelectorAll('.btn');
+
+       
+        buttons.forEach(btn => {
+            const value = btn.dataset.value;
+            if (value !== undefined) {
+                btn.addEventListener('click', () => insert(value));
+            }
+        });
+
+        
+        function insert(value) {
+            display.value += value;
+        }
+
+       
+        function calculate() {
+            try {
+                display.value = Function('"use strict";return (' + display.value + ')')();
+            } catch (e) {
+                display.value = "Error";
+            }
+        }
+
+       
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        // Equals button
+        document.getElementById('equals').addEventListener('click', calculate);
+
+        // Clear button
+        document.getElementById('clear').addEventListener('click', clearDisplay);
+
+        // Optional: Keyboard support
+        document.addEventListener("keydown", function (e) {
+            const keys = "0123456789/*-+.";
+            if (keys.includes(e.key)) {
+                insert(e.key);
+            } else if (e.key === "Enter") {
+                calculate();
+            } else if (e.key === "Backspace") {
+                display.value = display.value.slice(0, -1);
+            }
+        });
+    </script>
+</body>
+</html>
